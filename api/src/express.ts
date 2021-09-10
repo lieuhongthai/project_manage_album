@@ -1,7 +1,7 @@
 import express from "express";
 import { getFilesSizeInBytes } from "./common/utils";
 import path, { join } from "path";
-import { ACCESS_LOG_FILE_MAX_SIZE, NODE_ENV } from "./common/interfaces/constants";
+import { ACCESS_LOG_FILE_MAX_SIZE, NODE_ENV, PORT } from "./common/interfaces/constants";
 import fs from 'fs';
 import { default as logger, default as morgan } from 'morgan';
 import os from 'os';
@@ -12,7 +12,8 @@ import cookieSession from 'cookie-session';
 import helmet from 'helmet';
 import passport from 'passport';
 import authRouter from "./routes/auth.route";
-
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 
 let num = 0;
 const app = express();
@@ -81,6 +82,26 @@ function loadConfigs() {
 }
 
 function loadRoutes() {
+	const swaggerOptions = {
+		swaggerDefinition: {
+			openapi: '3.0.0',
+			info: {
+				title: 'Test Swagger API',
+				description: "This is a REST API application made with Express! For Test.",
+				version: '1.0.0'
+			},
+			servers: [
+				{
+					url: `http://localhost:${PORT}`,
+					description: 'Development server',
+				},
+			],
+		},
+		apis: ["./src/routes/*.ts", './definitions.yaml'],
+	}
+
+	const swaggerDocs = swaggerJsdoc(swaggerOptions);
+	app.use("/swagger-api", swaggerUi.serve, swaggerUi.setup(swaggerDocs, { explorer: true }))
 	app.use('/auth', authRouter);
 	// app.use('/api', verifyToken(), router);
 	// app.use('/authGoogle', authGoogleRouter);

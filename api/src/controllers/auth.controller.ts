@@ -6,7 +6,8 @@ import bcryptjs from "bcryptjs";
 import UserRoleModel from "../models/user.role.model";
 import { Op } from 'sequelize';
 import { JWT_EXPIRES_IN, JWT_SECRET } from "../common/interfaces/constants";
-
+import { Results } from "../common/interfaces/interfaces";
+import { User } from "../models/user.model"
 
 export async function signUp(req: express.Request, res: express.Response, next: express.NextFunction) {
 	const { username, email, password, roles } = req.body;
@@ -26,9 +27,9 @@ export async function signUp(req: express.Request, res: express.Response, next: 
 				.then((role: any) => {
 					user.setRoles(role).then(() => {
 						res.send({
-							code: 200,
+							code: STATUS.CREATED,
 							message: "User was registered successfully!",
-							data: null,
+							data: user,
 						})
 					})
 				})
@@ -36,9 +37,9 @@ export async function signUp(req: express.Request, res: express.Response, next: 
 		else {
 			user.setRoles(["2a99379e-6581-49e5-88d7-b26e35f513d4"]).then(() => {
 				res.send({
-					code: 200,
+					code: STATUS.CREATED,
 					message: "User was registered successfully!",
-					data: null,
+					data: user,
 				})
 			})
 		}
@@ -55,7 +56,7 @@ export async function signUp(req: express.Request, res: express.Response, next: 
 export async function signIn(req: express.Request, res: express.Response, next: express.NextFunction) {
 	console.log(12005, "req.body", req.body);
 
-	UserModel.findOne({
+	await UserModel.findOne({
 		where: {
 			username: req.body.username
 		}
@@ -105,4 +106,23 @@ export async function signIn(req: express.Request, res: express.Response, next: 
 		.catch((err: any) => {
 			res.status(STATUS.INTERNAL_SERVER_ERROR).send({ message: err.message });
 		})
+}
+
+export async function getUser(
+	req: express.Request, res: express.Response, next: express.NextFunction
+
+) {
+	const result = { code: 0, message: "", data: null } as Results;
+	try {
+		const user = await UserModel.findAll() as User[];
+		if (user && user.length > 0) {
+			result.code = STATUS.OK;
+			result.message = "Successfully!";
+			result.data = user;
+		}
+		res.status(result.code).send(result);
+
+	} catch (err: any) {
+		res.status(STATUS.INTERNAL_SERVER_ERROR).send({ message: err.message });
+	}
 }

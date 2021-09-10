@@ -1,0 +1,110 @@
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: token
+  schemas:
+    UserModel:
+      type: object
+      properties:
+        id:
+          type: string
+        codeName:
+          type: string
+        surname:
+          type: string
+        name:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        authToken:
+          type: string
+        expiryDate:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
+paths:
+  /auth/get: # địa chỉ api cần test
+    get:
+      summary: Returns a list of users. # Tóm tắt sơ lượt về api này
+      description: Optional extended description in CommonMark or HTML. # mô tả
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                # $ref: "#/components/schemas/UserModel"
+                type: object
+                properties:
+                  code: number
+                  message: string
+                  data: array
+                example:
+                  code: 200
+                  message: Successfully!
+                  data: []
+                ############################
+                # items:
+                #   type: string
+      externalDocs:
+        description: Learn more about user operations provided by this API.
+        url: https://swagger.io/docs/specification/describing-request-body/
+
+  /auth/signUp:
+    post:
+      summary: Register account user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Input username!
+                  example: user1
+                password:
+                  type: string
+                  description: Input password!
+                  example: 123456
+                email:
+                  type: string
+                  description: Input email!
+                  example: user1@gmail.com
+      responses:
+        "201":
+          description: User was registered successfully!
+
+  /auth/signIn:
+    post:
+      summary: Login account!
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Input username!
+                  example: user1
+                password:
+                  type: string
+                  description: Input password!
+                  example: 123456
+      responses:
+        "200":
+          description: User was login successfully!

@@ -4,8 +4,9 @@ import { APP_DB_URL } from "./common/interfaces/constants";
 const sequelize = new Sequelize(APP_DB_URL, {
 	logging: false,
 	dialectOptions: {
-		dateString: true,
+		// dateString: true,
 		typeCast: true,
+		// timezone: '+07:00'
 	},
 });
 

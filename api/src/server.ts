@@ -26,7 +26,7 @@ sequelize.sync({ alter: false, force: false })
 	.catch((err: Error) => console.log("Database is error :", err.toString()))
 	.then(() => {
 		// initial()
-		console.log("Drop and Resync Db	");
+		// console.log("Drop and Resync Db	");
 	});
 sequelize.authenticate()
 	.then(() => debug("Connected to MySQL :", APP_DB_URL))
