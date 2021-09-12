@@ -25,7 +25,7 @@ if (!fs.existsSync(STORAGE_LOCAL)) fs.mkdirSync(STORAGE_LOCAL);
 sequelize.sync({ alter: false, force: false })
 	.catch((err: Error) => console.log("Database is error :", err.toString()))
 	.then(() => {
-		// initial()
+		initial()
 		// console.log("Drop and Resync Db	");
 	});
 sequelize.authenticate()

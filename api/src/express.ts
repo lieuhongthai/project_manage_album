@@ -97,7 +97,7 @@ function loadRoutes() {
 				},
 			],
 		},
-		apis: ["./src/routes/*.ts", './definitions.yaml'],
+		apis: ['./definitions.yaml'],
 	}
 
 	const swaggerDocs = swaggerJsdoc(swaggerOptions);
