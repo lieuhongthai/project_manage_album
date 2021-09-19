@@ -24,7 +24,9 @@ import './assets/scss/index.scss';
 
 const history = createBrowserHistory();
 const store = configureStore();
-
+const moveToComponent = (componentRoute) => {
+  history.push(`/${componentRoute}`)
+}
 const App = () => {
   return (
     <StoreProvider store={store}>
@@ -32,8 +34,8 @@ const App = () => {
         <MuiPickersUtilsProvider utils={MomentUtils}>
           <Router history={history}>
             <ScrollReset />
-            <GoogleAnalytics />
-            <CookiesNotification />
+            {/* <GoogleAnalytics /> */}
+            {/* <CookiesNotification /> */}
             {renderRoutes(routes)}
           </Router>
         </MuiPickersUtilsProvider>
